@@ -1,0 +1,8 @@
+1. How does the system decide when to "ignore it" and when to "keep on going as if it didn’t occur"?
+2. What exactly are “signs of life” in fault detection tactics?
+3. How is “removing elements from service” specifically carried out in fault prevention tactics?
+
+1. Làm thế nào để hệ thống quyết định khi nào nên “ignore it” và khi nào nên “keep on going as if it didn’t occur”?
+
+2. Thế nào là “signs of life” trong các chiến thuật phát hiện lỗi?
+3. Cụ thể thì "removing elements from service" trong tactic phòng ngừa lỗi được thực hiện như thế nào?
