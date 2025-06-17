@@ -1,41 +1,85 @@
 const express = require("express");
 const cors = require("cors");
+const {
+  Worker,
+  isMainThread,
+  parentPort,
+  workerData,
+} = require("worker_threads");
 
-const app = express();
+if (isMainThread) {
+  const app = express();
 
-app.use(cors());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+  app.use(cors());
+  app.use(express.urlencoded({ extended: true }));
+  app.use(express.json());
 
-app.post("/option1", (req, res) => {
-  const { n } = req.body;
+  const fibCache = new Map();
 
-  function fib(n) {
-    if (n <= 1) return n;
-    return fib(n - 1) + fib(n - 2);
+  app.get("/fib", (req, res) => {
+    const number = req.query.n;
+
+    if (isNaN(number) || number < 0) {
+      return res.status(400).json({
+        error: 'Query "n" must be a non-negative integer.',
+      });
+    }
+
+    if (fibCache.has(number)) {
+      const result = fibCache.get(number);
+      return res.json({
+        number: number,
+        fibonacci: result,
+      });
+    }
+
+    const worker = new Worker(__filename, {
+      workerData: number,
+    });
+
+    worker.on("message", (result) => {
+      fibCache.set(number, result);
+      res.json({
+        number: number,
+        fibonacci: result,
+      });
+    });
+
+    worker.on("error", (err) => {
+      res.status(500).json({ error: "An error occurred during calculation." });
+    });
+
+    worker.on("exit", (code) => {
+      if (code !== 0) {
+        console.error(`Worker stopped with exit code ${code}`);
+      }
+    });
+  });
+
+  const port = 3000;
+  app.listen(port, () => {
+    console.log(`Server is listening on port ${port}`);
+  });
+} else {
+  function fibonacci(n) {
+    if (n < 2) {
+      return BigInt(n);
+    }
+
+    let a = BigInt(0);
+    let b = BigInt(1);
+    let result = BigInt(0);
+
+    for (let i = 2; i <= n; i++) {
+      result = a + b;
+      a = b;
+      b = result;
+    }
+    return b;
   }
-  const fibResult = fib(n);
 
-  res.json({ result: fibResult });
-});
-// increase resource effciency.
-// it stores the results of previously computed Fibonacci numbers in a memo object, which is passed along in recursive calls. This avoids redundant calculations, significantly reducing the time complexity, especially for larger values of n.
-app.post("/option2", (req, res) => {
-  const { n } = req.body;
+  const numberToCalculate = workerData;
+  const result = fibonacci(numberToCalculate);
 
-  function fib(n, memo = {}) {
-    if (n in memo) return memo[n];
-    if (n <= 1) return n;
-    memo[n] = fib(n - 1, memo) + fib(n - 2, memo);
-    return memo[n];
-  }
-  const fibResult = fib(n);
-
-  res.json({ result: fibResult });
-});
-
-const port = 3000;
-
-app.listen(port, () => {
-  console.log(`Server is listening on port ${port}`);
-});
+  parentPort.postMessage(result.toString());
+}
