@@ -4,3 +4,6 @@
 4. Sự khác biệt giữa faults và failure?
 5. Làm sao để tăng tính sẵn sàng của hệ thống?
 6. Làm thế nào để thiết kế một hệ thống có tính sẵn sàng cao?
+7. Why can the same hardware failure result in different error characteristics?
+8. When should I use a percentage measure instead of time?
+9. Why is availability always associated with a specific function in the system?
