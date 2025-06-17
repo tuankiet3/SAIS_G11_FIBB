@@ -7,3 +7,6 @@
 7. Why can the same hardware failure result in different error characteristics?
 8. When should I use a percentage measure instead of time?
 9. Why is availability always associated with a specific function in the system?
+10.What is formula to calculate availability of a system ?
+11. What is availability of a system ?
+12. How many availability tactic to prevent or limit faults?
