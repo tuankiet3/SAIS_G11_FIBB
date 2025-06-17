@@ -1,3 +1,6 @@
 1. Làm thế nào để hệ thống quyết định khi nào nên “ignore it” và khi nào nên “keep on going as if it didn’t occur”?
 2. Thế nào là “signs of life” trong các chiến thuật phát hiện lỗi?
 3. Cụ thể thì "removing elements from service" trong tactic phòng ngừa lỗi được thực hiện như thế nào?
+4. Sự khác biệt giữa faults và failure?
+5. Làm sao để tăng tính sẵn sàng của hệ thống?
+6. Làm thế nào để thiết kế một hệ thống có tính sẵn sàng cao?
